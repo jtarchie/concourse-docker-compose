@@ -1,0 +1,50 @@
+#!/bin/sh
+
+set -eux
+
+lib=$(cd $(dirname $0)/lib && pwd)
+. $lib/setup-graph.sh
+. $lib/setup-cgroups.sh
+
+mkdir /tmp/garden/depot
+
+cat > /tmp/worker.json <<EOF
+{
+  "platform": "linux",
+  "addr": "$(cat /etc/hosts | head -n 1 | cut -d '	' -f 1):7777",
+  "resource_types": [
+		{"type": "archive", "image": "docker:///concourse/archive-resource" },
+		{"type": "docker-image", "image": "docker:///concourse/docker-image-resource" },
+		{"type": "git", "image": "docker:///concourse/git-resource" },
+		{"type": "github-release", "image": "docker:///concourse/github-release-resource" },
+		{"type": "s3", "image": "docker:///concourse/s3-resource" },
+		{"type": "semver", "image": "docker:///concourse/semver-resource" },
+		{"type": "time", "image": "docker:///concourse/time-resource" },
+		{"type": "tracker", "image": "docker:///concourse/tracker-resource" }
+  ]
+}
+EOF
+
+cat /tmp/worker.json
+
+{
+  while true; do
+    curl -XPOST http://atc.${ATC_PORT_8080_TCP_ADDR}.xip.io:${ATC_PORT_8080_TCP_PORT}/api/v1/workers?ttl=30s \
+      -H "Content-Type: application/json" \
+      -d @/tmp/worker.json || sleep 1
+
+    sleep 5
+  done
+} &
+
+garden-linux \
+  --listenNetwork tcp \
+  --listenAddr 0.0.0.0:7777 \
+  --graph /tmp/garden/graph \
+  --depot /tmp/garden/depot \
+  --snapshots /tmp/garden/depot \
+  --bin /tmp/garden/src/github.com/cloudfoundry-incubator/garden-linux/linux_backend/bin \
+  --allowHostAccess \
+  --networkPool 10.244.0.0/22 \
+  --disableQuotas
+  --containerGraceTime 5m \
