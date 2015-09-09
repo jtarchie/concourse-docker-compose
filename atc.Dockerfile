@@ -2,9 +2,10 @@ FROM golang:1.4-cross
 
 RUN \
   git clone \
-    --branch develop \
-    https://github.com/concourse/concourse \
-    /root/concourse
+  --branch v0.62.0 \
+  --depth 1 \
+  https://github.com/concourse/concourse \
+  /root/concourse
 
 WORKDIR /root/concourse
 
