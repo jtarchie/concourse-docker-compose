@@ -6,7 +6,7 @@ lib=$(cd $(dirname $0)/lib && pwd)
 . $lib/setup-graph.sh
 . $lib/setup-cgroups.sh
 
-mkdir /tmp/garden/depot
+mkdir -p /garden/depot
 
 cat > /tmp/worker.json <<EOF
 {
@@ -40,10 +40,10 @@ cat /tmp/worker.json
 garden-linux \
   --listenNetwork tcp \
   --listenAddr 0.0.0.0:7777 \
-  --graph /tmp/garden/graph \
-  --depot /tmp/garden/depot \
-  --snapshots /tmp/garden/depot \
-  --bin /tmp/garden/src/github.com/cloudfoundry-incubator/garden-linux/linux_backend/bin \
+  --graph /garden/graph \
+  --depot /garden/depot \
+  --snapshots /garden/depot \
+  --bin /garden/src/github.com/cloudfoundry-incubator/garden-linux/linux_backend/bin \
   --allowHostAccess \
   --networkPool 10.244.0.0/22 \
   --disableQuotas

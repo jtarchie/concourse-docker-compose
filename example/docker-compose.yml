@@ -1,0 +1,10 @@
+atc:
+  image: taxiway/atc
+  links: ["db"]
+  ports: ["8080:8080"]
+garden:
+  image: taxiway/garden
+  links: ["atc"]
+  privileged: true
+db:
+  image: postgres:9.4

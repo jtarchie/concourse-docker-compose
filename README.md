@@ -8,6 +8,7 @@ Please install the following:
 # Usage
 
 ```sh
+cd example/
 docker-compose build
 docker-compose up
 ```

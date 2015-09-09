@@ -5,10 +5,10 @@ set -eux
 ATC_PORT_8080_TCP_ADDR=$(cat /etc/hosts | head -n 1 | cut -d '	' -f 1)
 ATC_PORT_8080_TCP_PORT=8080
 
-exec /usr/sbin/atc \
-  --templates /tmp/templates \
-  --public /tmp/public \
+exec atc \
+  --templates /atc/templates \
+  --public /atc/public \
   --sqlDataSource "postgres://postgres@$DB_PORT_5432_TCP_ADDR:$DB_PORT_5432_TCP_PORT/postgres?sslmode=disable" \
   --callbacksURL "http://$ATC_PORT_8080_TCP_ADDR:$ATC_PORT_8080_TCP_PORT" \
-  --cliDownloadsDir=/usr/bin/ \
+  --cliDownloadsDir=/atc \
   --dev

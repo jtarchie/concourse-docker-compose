@@ -1,0 +1,12 @@
+FROM debian:jessie
+
+ADD build.tgz /
+ENV PATH /atc:$PATH
+
+WORKDIR /
+
+EXPOSE 8080
+
+ADD scripts/atc-start /sbin/atc-start
+RUN chmod +x /sbin/atc-start
+CMD /sbin/atc-start

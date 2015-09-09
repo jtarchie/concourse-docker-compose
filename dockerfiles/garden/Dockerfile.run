@@ -1,0 +1,12 @@
+FROM debian:jessie 
+
+RUN apt-get update && apt-get -y install btrfs-tools curl iptables ulogd zip && apt-get clean
+ADD build.tgz / 
+
+ENV GOPATH /garden
+ENV PATH /garden/bin:$PATH
+
+EXPOSE 7777
+
+ADD scripts/ /garden/scripts
+CMD /garden/scripts/garden-linux-worker
