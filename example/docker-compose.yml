@@ -1,0 +1,12 @@
+atc:
+  image: taxiway/atc
+  links: ["db"]
+  ports: ["8080:8080"]
+garden-linux-worker:
+  image: taxiway/garden-linux-worker
+  links: ["atc"]
+  privileged: true
+db:
+  image: postgres:9.4
+  cpu_shares: 1024
+  mem_limit: 256m
