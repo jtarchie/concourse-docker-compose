@@ -1,0 +1,12 @@
+FROM busybox 
+
+ADD build/ /atc
+ENV PATH /atc:$PATH
+
+WORKDIR /
+
+EXPOSE 8080
+
+ADD scripts/atc /sbin/atc
+RUN chmod +x /sbin/atc
+CMD /sbin/atc
