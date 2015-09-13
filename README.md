@@ -8,6 +8,7 @@ Please install the following:
 # Usage
 
 ```sh
+rake # wait awhile, grab a coffee
 cd example/
 docker-compose build
 docker-compose up
