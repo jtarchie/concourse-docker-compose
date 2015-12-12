@@ -1,6 +1,6 @@
-FROM golang:1.4.2
+FROM golang:1.5
 
-RUN apt-get update && apt-get -y install btrfs-tools iptables ulogd zip
+RUN apt-get update && apt-get -y install iptables ulogd zip
 
 ADD garden-linux-release/src/ /garden/src
 
@@ -9,4 +9,7 @@ ENV PATH /garden/bin:$PATH
 
 RUN go install -tags daemon github.com/cloudfoundry-incubator/garden-linux
 RUN cd $GOPATH/src/github.com/cloudfoundry-incubator/garden-linux && make
+
+VOLUME /garden/graph
+
 CMD tar cvf - /garden | gzip -9c

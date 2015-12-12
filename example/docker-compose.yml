@@ -6,5 +6,7 @@ garden:
   image: taxiway/garden
   links: ["atc"]
   privileged: true
+  volumes:
+  - graph:/garden/graph
 db:
   image: postgres:9.4
