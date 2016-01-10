@@ -3,7 +3,6 @@
 set -eux
 
 lib=$(cd $(dirname $0)/lib && pwd)
-. $lib/setup-graph.sh
 . $lib/setup-cgroups.sh
 
 mkdir -p /garden/depot
@@ -29,7 +28,7 @@ cat /tmp/worker.json
 
 {
   while true; do
-    curl -XPOST http://atc.${ATC_PORT_8080_TCP_ADDR}.xip.io:${ATC_PORT_8080_TCP_PORT}/api/v1/workers?ttl=30s \
+    curl -XPOST http://${ATC_PORT_8080_TCP_ADDR}:${ATC_PORT_8080_TCP_PORT}/api/v1/workers?ttl=30s \
       -H "Content-Type: application/json" \
       -d @/tmp/worker.json || sleep 1
 
@@ -37,14 +36,18 @@ cat /tmp/worker.json
   done
 } &
 
+mkdir -p /garden/depot
+mkdir -p /garden/state
+mkdir -p /garden/snapshots
+
 garden-linux \
   --listenNetwork tcp \
   --listenAddr 0.0.0.0:7777 \
   --graph /garden/graph \
   --depot /garden/depot \
-  --snapshots /garden/depot \
+  --snapshots /garden/snapshots \
+  --stateDir /garden/state \
   --bin /garden/src/github.com/cloudfoundry-incubator/garden-linux/linux_backend/bin \
   --allowHostAccess \
   --networkPool 10.244.0.0/22 \
-  --disableQuotas
-  --containerGraceTime 5m \
+  --containerGraceTime 5m

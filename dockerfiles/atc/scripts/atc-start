@@ -8,7 +8,7 @@ ATC_PORT_8080_TCP_PORT=8080
 exec atc \
   --templates /atc/templates \
   --public /atc/public \
-  --sqlDataSource "postgres://postgres@$DB_PORT_5432_TCP_ADDR:$DB_PORT_5432_TCP_PORT/postgres?sslmode=disable" \
-  --callbacksURL "http://$ATC_PORT_8080_TCP_ADDR:$ATC_PORT_8080_TCP_PORT" \
-  --cliDownloadsDir=/atc \
-  --dev
+  --postgres-data-source "postgres://postgres@$DB_PORT_5432_TCP_ADDR:$DB_PORT_5432_TCP_PORT/postgres?sslmode=disable" \
+  --peer-url "http://$ATC_PORT_8080_TCP_ADDR:$ATC_PORT_8080_TCP_PORT" \
+  --cli-artifacts-dir /atc \
+  --development-mode

@@ -1,8 +1,8 @@
-FROM golang:1.4-cross 
+FROM golang:1.5
 
 RUN \
   git clone \
-  --branch v0.62.0 \
+  --branch v0.69.0 \
   --depth 1 \
   --recursive \
   https://github.com/concourse/concourse \
@@ -20,20 +20,17 @@ RUN go build -o /atc/atc github.com/concourse/atc/cmd/atc && \
 
 RUN mkdir -p /atc/linux/amd64
 RUN GOOS=linux GOARCH=amd64 \
-    go build -a -tags netgo -installsuffix netgo \
-    -o /atc/linux/amd64/fly \
+    go build -o /atc/linux/amd64/fly \
     github.com/concourse/fly
 
 RUN mkdir -p /atc/darwin/amd64
 RUN GOOS=darwin GOARCH=amd64 \
-    go build -a -tags netgo -installsuffix netgo \
-    -o /atc/darwin/amd64/fly \
+    go build -o /atc/darwin/amd64/fly \
     github.com/concourse/fly
 
 RUN mkdir -p /atc/windows/amd64
 RUN GOOS=windows GOARCH=amd64 \
-    go build -a -tags netgo -installsuffix netgo \
-    -o /atc/windows/amd64/fly \
+    go build -o /atc/windows/amd64/fly \
     github.com/concourse/fly
 
 CMD tar cvf - /atc | gzip -9c
